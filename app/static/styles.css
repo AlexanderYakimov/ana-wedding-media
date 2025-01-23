@@ -1,0 +1,225 @@
+/* General */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+    margin: 0;
+    padding: 0;
+}
+
+.card {
+    width: 100%;
+    height: 250px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.card img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+}
+
+.card img:hover {
+    transform: scale(1.1);
+}
+
+/* Cover */
+.cover {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.cover-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.cover::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.9));
+    z-index: 1;
+}
+
+.cover-text {
+    position: absolute;
+    bottom: 25%;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    z-index: 2;
+    font-family: Georgia, serif;
+}
+
+.cover-text h1 {
+    font-size: 3em;
+    margin: 0;
+}
+
+/* Gallery */
+.gallery-container {
+    margin-top: 2rem;
+}
+
+#gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+}
+
+#loading {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #666;
+    margin: 2rem 0;
+}
+
+/* Modal window */
+.modal-body {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+}
+
+.modal-body img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+/* Controls */
+#prevPhoto, #nextPhoto {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    font-size: 1.5rem;
+    padding: 10px 15px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10;
+    transition: background-color 0.3s;
+}
+
+#prevPhoto {
+    left: 10px;
+}
+
+#nextPhoto {
+    right: 10px;
+}
+
+#prevPhoto:hover, #nextPhoto:hover {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+#closing-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#download-button {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    border-radius: 5px;
+}
+
+#downloadPhoto {
+    font-size: 1.0rem;
+    padding: 5px 15px;
+}
+
+/* Photo counter */
+#photoCounter {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    color: white;
+    font-size: 0.9rem;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+/* Footer */
+.footer {
+    background-color: #000;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+    font-family: 'Georgia', serif;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.footer-nav {
+    display: flex;
+    gap: 15px;
+}
+
+.footer-nav a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 15px;
+}
+
+.footer-nav a:hover {
+    text-decoration: underline;
+}
+
+.back-to-top {
+    color: #fff;
+    text-decoration: none;
+    font-size: 15px;
+}
+
+.back-to-top:hover {
+    text-decoration: underline;
+}
+
+#scroll-indicator {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 4px;
+    background-color: #000;
+    z-index: 10000;
+}
