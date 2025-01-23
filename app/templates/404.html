@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Страница не найдена</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+</head>
+<body>
+    <div class="cover">
+        <img src="{{ url_for('static', filename='cover.jpg') }}" alt="Cover Image" class="cover-image">
+        <div class="cover-text">
+            <h1>404: Страница не найдена</h1>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <span>© 2024 Aleksandr Iakimov</span>
+            <nav class="footer-nav">
+                <a href="https://ana-wedding.com/#rec762938409">Love-story</a>
+                <a href="https://ana-wedding.com/#rec764988491">Место</a>
+                <a href="https://ana-wedding.com/#rec762938412">Программа</a>
+                <a href="https://ana-wedding.com/#rec765209889">Команда</a>
+                <a href="https://ana-wedding.com/#rec762938413">Памятка</a>
+                <a href="https://ana-wedding.com/#rec762938414">Я приду!</a>
+            </nav>
+            <a href="#top" class="back-to-top">НАВЕРХ &#x2191;</a>
+        </div>
+    </footer>
+</body>
+</html>

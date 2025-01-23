@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Галерея</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='scroll-indicator.js') }}" defer></script>
+</head>
+<body>
+    <div id="scroll-indicator"></div>
+    <div class="cover">
+        <img src="{{ url_for('static', filename='cover.jpg') }}" alt="Cover Image" class="cover-image">
+        <div class="cover-text">
+            <h1>Галерея</h1>
+        </div>
+    </div>
+
+    <div class="container py-5 gallery-container">
+        <div id="gallery" class="row row-cols-1 row-cols-md-4 g-4"></div>
+        <div id="loading">
+            <p>Загрузка...</p>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <span>© 2024 Aleksandr Iakimov</span>
+            <nav class="footer-nav">
+                <a href="https://ana-wedding.com/#rec762938409">Love-story</a>
+                <a href="https://ana-wedding.com/#rec764988491">Место</a>
+                <a href="https://ana-wedding.com/#rec762938412">Программа</a>
+                <a href="https://ana-wedding.com/#rec765209889">Команда</a>
+                <a href="https://ana-wedding.com/#rec762938413">Памятка</a>
+                <a href="https://ana-wedding.com/#rec762938414">Я приду!</a>
+            </nav>
+            <a href="#top" class="back-to-top">НАВЕРХ &#x2191;</a>
+        </div>
+    </footer>
+
+    <div class="modal fade" id="photoModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-body position-relative">
+                <button id="prevPhoto" class="btn btn-secondary">&larr;</button>
+                <img id="modalImage" src="" alt="Photo">
+                <button id="nextPhoto" class="btn btn-secondary">&rarr;</button>
+                
+                <div id="closing-button">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть" id="closeModal"></button>
+                </div>
+                
+                <div id="photoCounter"></div>
+
+                <div id="download-button">
+                    <button id="downloadPhoto" class="btn btn-dark">Скачать</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
