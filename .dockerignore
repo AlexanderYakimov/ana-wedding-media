@@ -6,9 +6,11 @@ __pycache__/
 
 # Ignore virtual environment
 venv/
+myenv/
 
 # Ignore development environment files
 .env
+*.env
 *.log
 logs/
 
@@ -18,6 +20,8 @@ logs/
 
 # Ignore unnecessary files
 .git/
+.gitignore
 Dockerfile*
 *.md
 *.sqlite3
+.DS_Store
