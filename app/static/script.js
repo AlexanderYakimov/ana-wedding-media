@@ -1,84 +1,64 @@
-// Array to hold all photos, current index, token for continuation, and loading flag
+// Array to hold all photos, current index, offset, and loading flag
 let photos = [];
 let currentIndex = 0;
-let nextToken = null;
-let isLoading = false;
-let zoomLevel = 1;
-let limit = 12;
 let offset = 0;
+let limit = 12;
 let totalPhotos = 0;
+let isLoading = false;
 
 /**
  * Function to calculate the limit of photos to load based on the current window size.
- * This allows dynamically changing the number of photos loaded depending on screen size.
  * @returns {number} The limit of photos to load.
  */
 function calculateLimit() {
-    const screenHeight = $(window).height();  // Высота окна
-    const cardHeight = 250;  // Высота карточки
-    const cardsPerRow = Math.floor($('#gallery').width() / 250);  // Number of cards in a row
-    const rowsPerScreen = Math.ceil(screenHeight / cardHeight);  // Number of rows in a window
-    return Math.max(cardsPerRow * rowsPerScreen * 3, 12);  // 10 images minimum
+    const screenHeight = document.documentElement.clientHeight || window.innerHeight;
+    const cardHeight = 250; // Height of a card
+    const cardsPerRow = Math.floor($('#gallery').width() / 250); // Number of cards in a row
+    const rowsPerScreen = Math.ceil(screenHeight / cardHeight); // Number of rows visible
+    return Math.max(cardsPerRow * rowsPerScreen * 3, 12); // At least 12 images
 }
 
 /**
  * Function to load photos from the server.
- * New photos are automatically loaded when the bottom of the page is reached.
  */
-function loadPhotos() {
-    if (isLoading) return;  // Если идет загрузка, не делаем запросы
+function loadPhotos(callback) {
+    if (isLoading) return;
 
     isLoading = true;
     $('#loading').show();
 
     $.getJSON('/api/photos', { limit: limit, offset: offset }, function (response) {
-        const newPhotos = response.files;  // Get new photos
+        const newPhotos = response.files;
         if (newPhotos.length === 0) {
-            $('#loading').text('No more images').fadeOut(2000);
-            $(window).off('scroll', handleScroll);  // Turn off the scroll handler
+            $('#loading').text('Больше фотографий нет').fadeOut(2000);
+            $('#loadMoreButton').hide();
             return;
         }
 
-        totalPhotos = response.total
+        totalPhotos = response.total;
         let gallery = $('#gallery');
         newPhotos.forEach(photo => {
-            // Add unique images only
             if (!photos.includes(photo)) {
                 photos.push(photo);
                 const card = `
                     <div class="col">
                         <div class="card">
                             <img src="/download/${photo}" alt="${photo}" data-bs-toggle="modal" 
-                                 data-bs-target="#photoModal" data-index="${photos.length - 1}" loading="lazy">
+                                 data-bs-target="#photoModal" data-index="${photos.length - 1}">
                         </div>
                     </div>`;
                 gallery.append(card);
             }
         });
 
-        offset += limit;  // Increase an offset
-        isLoading = false;  // Change the loading flag
+        offset += limit;
+        isLoading = false;
         $('#loading').hide();
+        if (callback) callback();
     }).fail(function () {
-        $('#loading').text('Ошибка загрузки. Пожалуйста, попробуйте снова.').fadeOut(2000);
+        $('#loading').text('Ошибка загрузки. Попробуйте ещё раз.').fadeOut(2000);
         isLoading = false;
     });
-}
-
-/**
- * Function to handle scrolling behavior.
- * Loads more photos when the user scrolls to the bottom of the page.
- */
-function handleScroll() {
-    const scrollTop = $(window).scrollTop();
-    const windowHeight = $(window).height();
-    const documentHeight = $(document).height();
-
-    // If it's scrolled until the end, load new images
-    if (scrollTop + windowHeight >= documentHeight - 100) {
-        if (isLoading) return;
-        loadPhotos();
-    }
 }
 
 /**
@@ -89,30 +69,29 @@ function updateModal() {
         console.error("Invalid photo index");
         return;
     }
-    const photo = photos[currentIndex];  // Get the current photo
-    const src = `/download/${photo}`;  // Set the source for the photo
-    $('#modalImage').attr('src', src);  // Update the modal image
-    $('#photoCounter').text(`${currentIndex + 1} of ${totalPhotos}`);  // Update the photo counter
+    const photo = photos[currentIndex];
+    const src = `/download/${photo}`;
+    $('#modalImage').attr('src', src);
+    $('#photoCounter').text(`${currentIndex + 1} из ${totalPhotos}`);
 }
 
 $(document).ready(function () {
     limit = calculateLimit();
-    loadPhotos();  // Load the initial set of photos
-    $(window).on('scroll', handleScroll);  // Listen for scroll events to load more photos
+    loadPhotos();
 
-    // When a photo is clicked, show the modal with the clicked photo
+    // Photo click event to show modal
     $('#gallery').on('click', 'img', function () {
         const index = $(this).data('index');
         if (index === undefined) {
             console.error("index not found for the clicked image");
             return;
         }
-        currentIndex = index
-        updateModal();  // Update the modal
-        $('#photoModal').modal('show');  // Show the modal
+        currentIndex = index;
+        updateModal();
+        $('#photoModal').modal('show');
     });
 
-    // Switch to the previous photo in the modal
+    // Previous photo button
     $('#prevPhoto').click(function () {
         if (currentIndex > 0) {
             currentIndex--;
@@ -120,13 +99,13 @@ $(document).ready(function () {
         }
     });
 
-    // Switch to the next photo in the modal
+    // Next photo button
     $('#nextPhoto').click(function () {
         if (currentIndex < photos.length - 1) {
             currentIndex++;
             updateModal();
         } else if (!isLoading) {
-            loadPhotos (() => {
+            loadPhotos(() => {
                 if (currentIndex < photos.length - 1) {
                     currentIndex++;
                     updateModal();
@@ -135,12 +114,17 @@ $(document).ready(function () {
         }
     });
 
-    // Download the current photo
+    // Download button
     $('#downloadPhoto').click(function () {
-        const photo = photos[currentIndex];  // Get the current photo
-        const link = document.createElement('a');  // Create a link element
-        link.href = `/download/${photo}`;  // Set the download URL
-        link.download = photo;  // Set the download attribute to the photo's name
-        link.click();  // Trigger the download
+        const photo = photos[currentIndex];
+        const link = document.createElement('a');
+        link.href = `/download/${photo}`;
+        link.download = photo;
+        link.click();
+    });
+
+    // "Load More" button click event
+    $('#loadMoreButton').click(function () {
+        loadPhotos();
     });
 });

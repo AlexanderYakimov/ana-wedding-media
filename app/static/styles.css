@@ -8,7 +8,7 @@ body {
 
 .card {
     width: 100%;
-    height: 250px;
+    height: 200px;
     overflow: hidden;
     position: relative;
     border: 1px solid #ccc;
@@ -38,7 +38,7 @@ body {
 .cover {
     position: relative;
     width: 100%;
-    height: 100vh;
+    height: 50vh;
     overflow: hidden;
 }
 
@@ -61,7 +61,7 @@ body {
 
 .cover-text {
     position: absolute;
-    bottom: 25%;
+    bottom: 15%;
     left: 50%;
     transform: translateX(-50%);
     color: white;
@@ -69,10 +69,11 @@ body {
     text-align: center;
     z-index: 2;
     font-family: Georgia, serif;
+    padding: 0 10px;
 }
 
 .cover-text h1 {
-    font-size: 3em;
+    font-size: 2em;
     margin: 0;
 }
 
@@ -88,11 +89,8 @@ body {
     justify-content: center;
 }
 
-#loading {
-    text-align: center;
-    font-size: 1.2rem;
-    color: #666;
-    margin: 2rem 0;
+#loadMoreContainer {
+    margin-top: 20px;
 }
 
 /* Modal window */
@@ -101,7 +99,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 80vh;
+    height: 70vh;
 }
 
 .modal-body img {
@@ -182,6 +180,7 @@ body {
 
 .footer-content {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
     max-width: 1200px;
@@ -191,13 +190,15 @@ body {
 
 .footer-nav {
     display: flex;
-    gap: 15px;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
 }
 
 .footer-nav a {
     color: #fff;
     text-decoration: none;
-    font-size: 15px;
+    font-size: 14px;
 }
 
 .footer-nav a:hover {
@@ -207,7 +208,7 @@ body {
 .back-to-top {
     color: #fff;
     text-decoration: none;
-    font-size: 15px;
+    font-size: 14px;
 }
 
 .back-to-top:hover {
@@ -222,4 +223,43 @@ body {
     height: 4px;
     background-color: #000;
     z-index: 10000;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .cover {
+        height: 30vh;
+    }
+
+    .cover-text h1 {
+        font-size: 1.5em;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .footer-nav {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #prevPhoto, #nextPhoto {
+        font-size: 1.2rem;
+    }
+
+    .card {
+        height: 150px;
+    }
+}
+
+@media (max-width: 576px) {
+    .footer-content {
+        padding: 0 10px;
+    }
+
+    .cover-text h1 {
+        font-size: 1.2em;
+    }
 }
