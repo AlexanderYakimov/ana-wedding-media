@@ -5,6 +5,7 @@ let offset = 0;
 let limit = 12;
 let totalPhotos = 0;
 let isLoading = false;
+let activeTag = "all";
 
 /**
  * Function to calculate the limit of photos to load based on the current window size.
@@ -20,6 +21,7 @@ function calculateLimit() {
 
 /**
  * Function to load photos from the server.
+ * @param {Function} callback - Optional callback function to execute after photos are loaded.
  */
 function loadPhotos(callback) {
     if (isLoading) return;
@@ -27,7 +29,7 @@ function loadPhotos(callback) {
     isLoading = true;
     $('#loading').show();
 
-    $.getJSON('/api/photos', { limit: limit, offset: offset }, function (response) {
+    $.getJSON('/api/photos', { limit: limit, offset: offset, tag: activeTag }, function (response) {
         const newPhotos = response.files;
         if (newPhotos.length === 0) {
             $('#loading').text('Больше фотографий нет').fadeOut(2000);
@@ -75,9 +77,29 @@ function updateModal() {
     $('#photoCounter').text(`${currentIndex + 1} из ${totalPhotos}`);
 }
 
+/**
+ * Function to reset the gallery and reload photos.
+ */
+function resetGallery() {
+    photos = [];
+    currentIndex = 0;
+    offset = 0;
+    $('#gallery').empty();
+    $('#loadMoreButton').show();
+    loadPhotos();
+}
+
 $(document).ready(function () {
     limit = calculateLimit();
     loadPhotos();
+
+    // Filter button click event
+    $('.filter-btn').click(function () {
+        activeTag = $(this).data('tag');
+        $('.filter-btn').removeClass('active');
+        $(this).addClass('active');
+        resetGallery();
+    });
 
     // Photo click event to show modal
     $('#gallery').on('click', 'img', function () {
