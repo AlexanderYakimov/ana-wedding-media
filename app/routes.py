@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, jsonify, send_file, request, send_from_directory
-from app.services.s3_service import count_obj, list_files, download_file
+from app.services.s3_service import list_files, download_file
+from app.services.redis_service import get_files_by_tag
 from io import BytesIO
 
 def setup_routes(app) -> None:
@@ -27,7 +28,7 @@ def setup_routes(app) -> None:
     @app.route('/api/photos')
     def get_photos() -> 'jsonify':
         """
-        API endpoint to fetch a list of photos from S3.
+        API endpoint to fetch a list of photos by tag from S3.
 
         This route handles the requests to retrieve a list of photos 
         from S3 storage. It supports pagination via a continuation token
@@ -39,8 +40,13 @@ def setup_routes(app) -> None:
         try:
             limit = int(request.args.get('limit', 12))
             offset = int(request.args.get('offset', 0))
-            response = list_files(offset=offset, limit=limit)
-            response['total'] = count_obj()
+            tag = request.args.get('tag', 'all')
+
+            if tag == 'all':
+                response = list_files(offset=offset, limit=limit)
+            else:
+                object_keys=get_files_by_tag(tag=tag)
+                response = list_files(offset=offset, limit=limit, object_keys=object_keys)
             return jsonify(response)
         except Exception as e:
             print(f"Error fetching photos: {e}")
